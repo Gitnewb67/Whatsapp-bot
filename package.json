@@ -1,0 +1,20 @@
+{
+  "name": "kerala-supermarket-whatsapp-bot",
+  "version": "1.0.0",
+  "description": "WhatsApp customer bot for Kerala supermarket — product availability and price queries",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test-query": "node scripts/test-query.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
+    "fuse.js": "^7.0.0",
+    "axios": "^1.6.8"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
