@@ -30,6 +30,9 @@ async function sendMessage(to, text) {
   }
 
   try {
+    console.log('[Debug] Base URL:', waClient.defaults.baseURL);
+    console.log('[Debug] Phone Number ID:', process.env.WHATSAPP_PHONE_NUMBER_ID);
+    console.log('[Debug] Token prefix:', process.env.WHATSAPP_ACCESS_TOKEN?.substring(0, 20));
     await waClient.post('/messages', {
       messaging_product: 'whatsapp',
       to,
@@ -69,3 +72,4 @@ function parseWebhookPayload(body) {
 }
 
 module.exports = { sendMessage, parseWebhookPayload };
+
