@@ -99,6 +99,8 @@ const WORD_ALIASES = {
   'sooji':        'semolina',
   'maida':        'all purpose flour',
   'besan':        'chickpea flour',
+  'semiya':       'vermicelli',
+  'seviyan':      'vermicelli',
 
   // Sugar & Jaggery
   'panjasara':    'sugar',

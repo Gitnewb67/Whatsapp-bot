@@ -50,4 +50,42 @@ function isNumberSelection(text) {
   return /^\s*[1-9]\d?\s*$/.test(text.trim());
 }
 
-module.exports = { setDisambiguation, getDisambiguation, clearSession, isNumberSelection };
+// ── Cart ──────────────────────────────────────────────────────────────────────
+
+// Map of phone number → Array of { id, name, brand, unit, price, qty }
+const carts = new Map();
+
+function addToCart(phone, product, qty = 1) {
+  const cart = carts.get(phone) || [];
+  const existing = cart.find(item => item.id === product.id);
+  if (existing) {
+    existing.qty += qty;
+  } else {
+    cart.push({ id: product.id, name: product.name, brand: product.brand, unit: product.unit, price: product.price, qty });
+  }
+  carts.set(phone, cart);
+}
+
+function getCart(phone) {
+  return carts.get(phone) || [];
+}
+
+function clearCart(phone) {
+  carts.delete(phone);
+}
+
+function getCartSummary(phone) {
+  const cart = getCart(phone);
+  if (cart.length === 0) return 'Your cart is empty.';
+  let total = 0;
+  let summary = '*Your cart:*\n\n';
+  cart.forEach((item, i) => {
+    const lineTotal = item.price * item.qty;
+    total += lineTotal;
+    summary += `${i + 1}. *${item.name}* × ${item.qty}  ₹${lineTotal}\n`;
+  });
+  summary += `\n*Total: ₹${total}*`;
+  return summary;
+}
+
+module.exports = { setDisambiguation, getDisambiguation, clearSession, isNumberSelection, addToCart, getCart, clearCart, getCartSummary };

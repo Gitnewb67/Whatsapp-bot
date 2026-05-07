@@ -15,7 +15,7 @@ const USE_REAL = process.env.USE_REAL_ERP === 'true';
 const erpClient = axios.create({
   baseURL: process.env.ZEEV_ERP_BASE_URL,
   headers: {
-    'Authorization': `Bearer ${process.env.ZEEV_ERP_API_KEY}`,
+    'x-api-key': process.env.ZEEV_ERP_API_KEY,
     'Content-Type': 'application/json',
   },
   timeout: 8000,
@@ -66,17 +66,25 @@ async function getAllProducts() {
   }
 
   try {
-    const { data } = await erpClient.get('/products', {
-      params: { active: true, page_size: 500 },
-    });
-    // Normalise ERP response shape to match our internal format
+    const params = {
+      search:            '',
+      'searchFields[]':  'item_name',
+      page:              0,
+      pageSize:          8,
+    };
+    if (process.env.ZEEV_BRANCH_ID) {
+      params.branch_id = process.env.ZEEV_BRANCH_ID;
+    }
+
+    const { data } = await erpClient.get('/api/v1/items', { params });
     return data.items.map(item => ({
-      id:       item.product_code,
-      name:     item.product_name,
+      id:       item.item_code,
+      name:     item.item_name,
       category: item.category,
       brand:    item.brand,
       unit:     item.unit_of_measure,
       price:    item.selling_price,
+      mrp:      item.mrp,
       stock:    item.available_qty,
     }));
   } catch (err) {

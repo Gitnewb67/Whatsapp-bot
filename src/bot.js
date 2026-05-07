@@ -9,11 +9,15 @@
 
 const { searchProducts, findAlternatives } = require('./matcher');
 const { getProductDetails } = require('./erp');
+const { sendMessage } = require('./whatsapp');
 const {
   setDisambiguation,
   getDisambiguation,
   clearSession,
   isNumberSelection,
+  getCart,
+  clearCart,
+  getCartSummary,
 } = require('./state');
 
 // ── Reply builders ────────────────────────────────────────────────────────────
@@ -72,6 +76,33 @@ function notFoundReply(query) {
  */
 async function handleIncomingMessage({ from, text }) {
   const trimmed = text.trim();
+  const lower = trimmed.toLowerCase();
+
+  // ── Cart commands ──────────────────────────────────────────────────────────
+  if (lower === 'cart') {
+    return getCartSummary(from);
+  }
+
+  if (lower === 'clear') {
+    clearCart(from);
+    return `🗑️ Your cart has been cleared.`;
+  }
+
+  if (lower === 'checkout') {
+    const cart = getCart(from);
+    if (cart.length === 0) {
+      return `Your cart is empty. Search for products and add them before checking out.`;
+    }
+    const summary = getCartSummary(from);
+    if (process.env.MANAGER_PHONE) {
+      await sendMessage(
+        process.env.MANAGER_PHONE,
+        `🛒 *New order from ${from}*\n\n${summary}`
+      );
+    }
+    clearCart(from);
+    return `${summary}\n\n✅ Your order has been placed! We will contact you shortly to confirm.`;
+  }
 
   // ── Case 1: Customer is picking from a disambiguation list ──────────────────
   const session = getDisambiguation(from);
