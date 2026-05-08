@@ -27,7 +27,7 @@ function inStockReply(product, details) {
   const stockLabel = details.stock <= 10 ? `⚠️ Only ${details.stock} left` : `✅ In stock`;
   return (
     `*${product.name}* — ${product.brand}\n` +
-    `💰 ₹${details.price} / ${details.unit}\n` +
+    `💰 ₹${details.price}${details.unit ? ` / ${details.unit}` : ''}\n` +
     `${stockLabel}\n\n` +
     `Type another product name to search again.`
   );
@@ -44,7 +44,7 @@ function outOfStockReply(product, alternatives) {
 
   reply += `Here are similar products that are available:\n\n`;
   alternatives.forEach((alt, i) => {
-    reply += `${i + 1}. *${alt.name}* — ${alt.brand}  ₹${alt.price}/${alt.unit}  (${alt.stock} in stock)\n`;
+    reply += `${i + 1}. *${alt.name}* — ${alt.brand}  ₹${alt.price}${alt.unit ? `/${alt.unit}` : ''}  (${alt.stock} in stock)\n`;
   });
   reply += `\nReply with a number to see details, or type a new search.`;
   return reply;
@@ -53,7 +53,7 @@ function outOfStockReply(product, alternatives) {
 function disambiguationReply(products) {
   let reply = `I found ${products.length} matching products. Which one do you mean?\n\n`;
   products.forEach((p, i) => {
-    const stockTag = p.stock > 0 ? `₹${p.price}/${p.unit}` : `OUT OF STOCK`;
+    const stockTag = p.stock > 0 ? `₹${p.price}${p.unit ? `/${p.unit}` : ''}` : `OUT OF STOCK`;
     reply += `${i + 1}. *${p.name}* — ${p.brand}  (${stockTag})\n`;
   });
   reply += `\nReply with a number (e.g. *1*) to add it to your cart.`;

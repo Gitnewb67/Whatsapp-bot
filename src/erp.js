@@ -117,7 +117,7 @@ async function searchProductsFromERP(query, limit = 6) {
       name:       item.item_name,
       category:   item.category,
       brand:      '',
-      unit:       item.unit_of_measure,
+      unit:       '',
       price:      item.selling_price,
       mrp:        item.mrp,
       stock:      1,
