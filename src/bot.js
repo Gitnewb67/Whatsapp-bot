@@ -15,6 +15,7 @@ const {
   getDisambiguation,
   clearSession,
   isNumberSelection,
+  addToCart,
   getCart,
   clearCart,
   getCartSummary,
@@ -55,7 +56,7 @@ function disambiguationReply(products) {
     const stockTag = p.stock > 0 ? `₹${p.price}/${p.unit}` : `OUT OF STOCK`;
     reply += `${i + 1}. *${p.name}* — ${p.brand}  (${stockTag})\n`;
   });
-  reply += `\nReply with a number (e.g. *1*) to get full details.`;
+  reply += `\nReply with a number (e.g. *1*) to add it to your cart.`;
   return reply;
 }
 
@@ -131,7 +132,8 @@ async function handleIncomingMessage({ from, text }) {
       return outOfStockReply(chosen, alternatives);
     }
 
-    return inStockReply(chosen, details);
+    addToCart(from, chosen);
+    return `Added ${chosen.name} to cart. Type *cart* to view or *checkout* to order.`;
   }
 
   // If they have an active session but typed something other than a number,
