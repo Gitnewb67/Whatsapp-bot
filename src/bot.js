@@ -153,7 +153,7 @@ async function handleIncomingMessage({ from, text }) {
     );
   }
 
-  const matches = searchProducts(rawQuery);
+  const matches = await searchProducts(rawQuery);
 
   if (matches.length === 0) {
     return notFoundReply(rawQuery);

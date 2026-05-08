@@ -93,4 +93,40 @@ async function getAllProducts() {
   }
 }
 
-module.exports = { getProductDetails, getAllProducts };
+/**
+ * Search the ERP catalogue by keyword and return results in the same shape
+ * as matcher.js's Fuse.js results (matchScore + searchedAs fields included).
+ * Only called when USE_REAL_ERP=true.
+ */
+async function searchProductsFromERP(query, limit = 6) {
+  try {
+    const params = {
+      search:           query,
+      'searchFields[]': 'item_name',
+      page:             0,
+      pageSize:         limit,
+    };
+    if (process.env.ZEEV_BRANCH_ID) {
+      params.branch_id = process.env.ZEEV_BRANCH_ID;
+    }
+
+    const { data } = await erpClient.get('/api/v1/items', { params });
+    return data.items.map(item => ({
+      id:         item.item_code,
+      name:       item.item_name,
+      category:   item.category,
+      brand:      item.brand,
+      unit:       item.unit_of_measure,
+      price:      item.selling_price,
+      mrp:        item.mrp,
+      stock:      item.available_qty,
+      matchScore: 0,
+      searchedAs: query,
+    }));
+  } catch (err) {
+    console.error(`[ERP] searchProductsFromERP(${query}) failed:`, err.message);
+    return [];
+  }
+}
+
+module.exports = { getProductDetails, getAllProducts, searchProductsFromERP };

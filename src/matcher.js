@@ -4,6 +4,9 @@
 const Fuse = require('fuse.js');
 const { QUESTION_WORDS, PHRASE_ALIASES, WORD_ALIASES } = require('./aliases');
 const products = require('../data/products');
+const { searchProductsFromERP } = require('./erp');
+
+const USE_REAL = process.env.USE_REAL_ERP === 'true';
 
 // Fuse.js index — built once at startup for performance
 const fuse = new Fuse(products, {
@@ -49,10 +52,14 @@ function preprocessQuery(raw) {
  * Returns an array of matching products (up to `limit`), each with a `score` field.
  * Scores are normalised: 0 = perfect match, 1 = worst match (Fuse.js convention inverted here).
  */
-function searchProducts(rawQuery, limit = 6) {
+async function searchProducts(rawQuery, limit = 6) {
   const query = preprocessQuery(rawQuery);
 
   if (!query) return [];
+
+  if (USE_REAL) {
+    return searchProductsFromERP(query, limit);
+  }
 
   const results = fuse.search(query, { limit });
 
