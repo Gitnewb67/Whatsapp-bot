@@ -18,7 +18,7 @@ const erpClient = axios.create({
     'x-api-key': process.env.ZEEV_ERP_API_KEY,
     'Content-Type': 'application/json',
   },
-  timeout: 8000,
+  timeout: 15000,
 });
 
 // ── Mock helpers ──────────────────────────────────────────────────────────────
@@ -111,7 +111,8 @@ async function searchProductsFromERP(query, limit = 6) {
     }
 
     const { data } = await erpClient.get('/api/v1/items', { params });
-    return data.items.map(item => ({
+    console.log('Zeev raw response:', JSON.stringify(data));
+    return (data.list || data.items || []).map(item => ({
       id:         item.item_code,
       name:       item.item_name,
       category:   item.category,
