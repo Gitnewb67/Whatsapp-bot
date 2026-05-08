@@ -116,11 +116,11 @@ async function searchProductsFromERP(query, limit = 6) {
       id:         item.item_code,
       name:       item.item_name,
       category:   item.category,
-      brand:      item.brand,
+      brand:      '',
       unit:       item.unit_of_measure,
       price:      item.selling_price,
       mrp:        item.mrp,
-      stock:      item.available_qty,
+      stock:      1,
       matchScore: 0,
       searchedAs: query,
     }));
