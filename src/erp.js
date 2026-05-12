@@ -110,6 +110,7 @@ async function searchProductsFromERP(query, limit = 6) {
       params.branch_id = process.env.ZEEV_BRANCH_ID;
     }
 
+    console.log('[ERP] request URL:', erpClient.getUri({ url: '/api/v1/items', params }));
     const { data } = await erpClient.get('/api/v1/items', { params });
     console.log('Zeev raw response:', JSON.stringify(data));
     return (data.list || data.items || []).map(item => ({
