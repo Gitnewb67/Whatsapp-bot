@@ -98,7 +98,7 @@ async function getAllProducts() {
  * as matcher.js's Fuse.js results (matchScore + searchedAs fields included).
  * Only called when USE_REAL_ERP=true.
  */
-async function searchProductsFromERP(query, limit = 6) {
+async function searchProductsFromERP(query, limit = 8) {
   try {
     const params = {
       search:       query,
@@ -126,7 +126,7 @@ async function searchProductsFromERP(query, limit = 6) {
       searchedAs: query,
     }));
   } catch (err) {
-    console.error(`[ERP] searchProductsFromERP(${query}) failed:`, err.message);
+    console.error(`[ERP] searchProductsFromERP(${query}) failed:`, err.stack || err);
     return [];
   }
 }
