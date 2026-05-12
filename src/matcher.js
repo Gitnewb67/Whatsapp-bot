@@ -58,7 +58,16 @@ async function searchProducts(rawQuery, limit = 6) {
   if (!query) return [];
 
   if (USE_REAL) {
-    return searchProductsFromERP(query, limit);
+    const erpResults = await searchProductsFromERP(query, limit);
+    if (erpResults.length === 0) return [];
+    const secondaryFuse = new Fuse(erpResults, {
+      keys: ['name'],
+      threshold: 0.3,
+      includeScore: true,
+      ignoreLocation: true,
+      minMatchCharLength: 2,
+    });
+    return secondaryFuse.search(query).map(r => r.item);
   }
 
   const results = fuse.search(query, { limit });
