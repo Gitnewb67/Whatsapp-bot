@@ -97,7 +97,6 @@ const WORD_ALIASES = {
   'gothambu':     'wheat',
   'rava':         'semolina',
   'sooji':        'semolina',
-  'maida':        'all purpose flour',
   'besan':        'chickpea flour',
   'semiya':       'vermicelli',
   'seviyan':      'vermicelli',
