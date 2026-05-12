@@ -101,9 +101,10 @@ async function getAllProducts() {
 async function searchProductsFromERP(query, limit = 6) {
   try {
     const params = {
-      search:    query,
-      page:      0,
-      pageSize:  limit,
+      search:       query,
+      searchFields: 'item_name',
+      page:         0,
+      pageSize:     limit,
     };
     if (process.env.ZEEV_BRANCH_ID) {
       params.branch_id = process.env.ZEEV_BRANCH_ID;
