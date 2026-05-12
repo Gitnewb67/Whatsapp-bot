@@ -123,6 +123,9 @@ const WORD_ALIASES = {
   'chaa':         'tea',
   'kaapi':        'coffee',
 
+  // Stationery
+  'exam sheet':   'exam paper',
+
   // Personal care
   'mudi enna':    'hair oil',
 };

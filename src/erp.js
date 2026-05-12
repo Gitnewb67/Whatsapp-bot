@@ -121,7 +121,7 @@ async function searchProductsFromERP(query, limit = 8) {
       unit:       '',
       price:      item.selling_price,
       mrp:        item.mrp,
-      stock:      1,
+      stock:      item.stock > 0 ? 1 : 0,
       matchScore: 0,
       searchedAs: query,
     }));
