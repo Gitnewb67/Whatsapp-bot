@@ -1,7 +1,7 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
+const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
 async function extractSearchQuery(customerMessage) {
   if (!process.env.GEMINI_API_KEY) return customerMessage;
@@ -17,7 +17,7 @@ Customer message: "${customerMessage}"`;
     return query;
   } catch (err) {
     console.error('[AI] Gemini error:', err.message);
-    return customerMessage; // fallback to original
+    return customerMessage;
   }
 }
 
