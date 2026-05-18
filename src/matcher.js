@@ -5,6 +5,7 @@ const Fuse = require('fuse.js');
 const { QUESTION_WORDS, PHRASE_ALIASES, WORD_ALIASES } = require('./aliases');
 const products = require('../data/products');
 const { searchProductsFromERP } = require('./erp');
+const { extractSearchQuery } = require('./ai');
 
 const USE_REAL = process.env.USE_REAL_ERP === 'true';
 
@@ -53,7 +54,8 @@ function preprocessQuery(raw) {
  * Scores are normalised: 0 = perfect match, 1 = worst match (Fuse.js convention inverted here).
  */
 async function searchProducts(rawQuery, limit = 6) {
-  const query = preprocessQuery(rawQuery);
+  const aiQuery = await extractSearchQuery(rawQuery);
+  const query = preprocessQuery(aiQuery);
 
   if (!query) return [];
 
