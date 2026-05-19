@@ -22,7 +22,7 @@ async function extractSearchQuery(customerMessage) {
     console.log(`[AI] "${customerMessage}" → "${query}"`);
     return query;
   } catch (err) {
-    console.error('[AI] Gemini error:', err.message);
+    console.error('[AI] Gemini error:', err.message, err.response?.data);
     return customerMessage;
   }
 }
