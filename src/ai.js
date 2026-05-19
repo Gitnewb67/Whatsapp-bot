@@ -4,6 +4,8 @@ async function extractSearchQuery(customerMessage) {
   if (!process.env.GEMINI_API_KEY) return customerMessage;
 
   try {
+    console.log('[AI] API Key present:', !!process.env.GEMINI_API_KEY);
+    console.log('[AI] API Key prefix:', process.env.GEMINI_API_KEY?.substring(0, 8));
     const response = await axios.post(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite-001:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
